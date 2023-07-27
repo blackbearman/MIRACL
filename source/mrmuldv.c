@@ -1,57 +1,80 @@
-/*
- *  Borland C++ 32-bit compiler (BCC32). Use with mirdef.h32 
- *  Uses inline assembly feature. Suitable for Win32 Apps
- *  Also compatible with Microsoft Visual C++ 32-bit compiler
- */
 
-#define ASM _asm
+/* GCC inline assembly version for Linux64 */
 
-int muldiv(a,b,c,m,rp)
-int a,b,c,m,*rp;
+#include "miracl.h"
+
+
+mr_small muldiv(mr_small a,mr_small b,mr_small c,mr_small m,mr_small *rp)
 {
-        ASM mov   eax,DWORD PTR a      
-        ASM mul   DWORD PTR b          
-        ASM add   eax,DWORD PTR c      
-        ASM adc   edx,0h                 
-        ASM div   DWORD PTR m          
-        ASM mov   ebx,DWORD PTR rp     
-        ASM mov   [ebx],edx              
+    mr_small q;
+    __asm__ __volatile__ (
+    "movq %1,%%rax\n"
+    "mulq %2\n"
+    "addq %3,%%rax\n"
+    "adcq $0,%%rdx\n"
+    "divq %4\n"
+    "movq %5,%%rbx\n"
+    "movq %%rdx,(%%rbx)\n"
+    "movq %%rax,%0\n"
+    : "=m"(q)
+    : "m"(a),"m"(b),"m"(c),"m"(m),"m"(rp)
+    : "rax","rbx","memory"
+    );
+    return q;
 }
 
-int muldvm(a,c,m,rp)
-int a,c,m,*rp;
+mr_small muldvm(mr_small a,mr_small c,mr_small m,mr_small *rp)
 {
-        ASM mov   edx,DWORD PTR a      
-        ASM mov   eax,DWORD PTR c      
-        ASM div   DWORD PTR m          
-        ASM mov   ebx,DWORD PTR rp     
-        ASM mov   [ebx],edx              
+    mr_small q;
+    __asm__ __volatile__ (
+    "movq %1,%%rdx\n"
+    "movq %2,%%rax\n"
+    "divq %3\n"
+    "movq %4,%%rbx\n"
+    "movq %%rdx,(%%rbx)\n"
+    "movq %%rax,%0\n"
+    : "=m"(q)
+    : "m"(a),"m"(c),"m"(m),"m"(rp)
+    : "rax","rbx","memory"
+    );        
+    return q;
 }
 
-int muldvd(a,b,c,rp)
-int a,b,c,*rp;
+mr_small muldvd(mr_small a,mr_small b,mr_small c,mr_small *rp)
 {
-        ASM mov   eax,DWORD PTR a      
-        ASM mul   DWORD PTR b          
-        ASM add   eax,DWORD PTR c      
-        ASM adc   edx,0h                 
-        ASM mov   ebx,DWORD PTR rp     
-        ASM mov   [ebx],eax              
-        ASM mov   eax,edx
+    mr_small q;
+    __asm__ __volatile__ (
+    "movq %1,%%rax\n"
+    "mulq %2\n"
+    "addq %3,%%rax\n"
+    "adcq $0,%%rdx\n"
+    "movq %4,%%rbx\n"
+    "movq %%rax,(%%rbx)\n"
+    "movq %%rdx,%0\n"
+    : "=m"(q)
+    : "m"(a),"m"(b),"m"(c),"m"(rp)
+    : "rax","rbx","memory"
+    );
+    return q;
 }
 
-void muldvd2(a,b,c,rp)
-int a,b,*c,*rp;
+void muldvd2(mr_small a,mr_small b,mr_small *c,mr_small *rp)
 {
-        ASM mov   eax,DWORD PTR a      
-        ASM mul   DWORD PTR b          
-        ASM mov   ebx,DWORD PTR c
-        ASM add   eax,[ebx]
-        ASM adc   edx,0h
-        ASM mov   esi,DWORD PTR rp
-        ASM add   eax,[esi]
-        ASM adc   edx,0h
-        ASM mov   [esi],eax              
-        ASM mov   [ebx],edx
+    __asm__ __volatile__ (
+    "movq %0,%%rax\n"
+    "mulq %1\n"
+    "movq %2,%%rbx\n"
+    "addq (%%rbx),%%rax\n"
+    "adcq $0,%%rdx\n"
+    "movq %3,%%rsi\n"
+    "addq (%%rsi),%%rax\n"
+    "adcq $0,%%rdx\n"
+    "movq %%rax,(%%rsi)\n"
+    "movq %%rdx,(%%rbx)\n"
+    : 
+    : "m"(a),"m"(b),"m"(c),"m"(rp)
+    : "rax","rbx","rsi","memory"
+    );
+    
 }
 
