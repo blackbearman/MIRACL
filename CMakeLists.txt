@@ -100,3 +100,25 @@ add_executable("seadog"
 target_include_directories("seadog" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_include_directories("seadog" PRIVATE "source/curves")
 target_link_libraries("seadog" PRIVATE miracl)
+
+
+add_library(sea
+    source/libsea/main.cpp 
+    source/libsea/mueller.cpp 
+    source/libsea/sea.cpp 
+    source/curve/polyxy.cpp
+    source/curve/ps_big.cpp
+)
+target_include_directories(sea PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(sea PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/source/curve")
+target_link_libraries(sea PRIVATE miracl)
+add_library(MIRACL::sea ALIAS sea)
+
+
+add_executable("bee2dog" 
+    "source/curve/bee2dog.c" 
+)
+target_include_directories("bee2dog" PRIVATE "source")
+target_link_libraries("bee2dog" PRIVATE sea)
+target_link_libraries("bee2dog" PRIVATE bee2)
+
