@@ -1159,7 +1159,6 @@ int sea_main(Big a, Big b, const char* in, const char* out)
     gprime(10000);                 // generate small primes < 1000
     atkin=FALSE;
     fout = out != NULL;
-    a=0; b=0;
 
 // Interpret command line
     Base=16;
@@ -1988,11 +1987,13 @@ int main(int argc,char **argv) {
     mip->IOBASE=16;
     big dest = mirvar(0);
     Big b = le2big(a, sizeof(a));
+    const char* in = "m.txt";
+    const char* out = "c.txt";
 
     cout << b << endl;
     mirexit();
     
-    mueller_main(12, "mueller.txt", 0, 30);
+    mueller_main(12, "mueller.txt", 0, 100);
 
     mip=mirsys(1000,0);
     mip->IOBASE=16;
@@ -2000,6 +2001,9 @@ int main(int argc,char **argv) {
     mirexit();
 
     mip=mirsys(18,0);
+    Big a1 = -3;
+    Big b1 = 7;
     mip->IOBASE=16;
+    sea_main(a1, b1, in, out);
     mirexit();
 }
