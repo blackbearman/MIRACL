@@ -92,4 +92,11 @@ if(MIRACL_BUILD_EXE)
     )
 endif(MIRACL_BUILD_EXE)
 
-
+add_executable("seadog" 
+    "source/curve/seadog.cpp" 
+    "source/curve/ps_big.cpp"
+    "source/curve/polyxy.cpp"
+)
+target_include_directories("seadog" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories("seadog" PRIVATE "source/curves")
+target_link_libraries("seadog" PRIVATE miracl)
