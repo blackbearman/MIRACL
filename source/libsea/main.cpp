@@ -8,23 +8,25 @@ static struct {
     std::string mueller;
     std::string processed;
     std::string result;
+    bool hex;
 } _main;
 
-int sea_init(const char* mueller)
+int sea_init(const char* mueller, int hex)
 {
     _main.mueller = std::string(mueller);
     _main.processed = _main.mueller + ".o";
     _main.result = _main.mueller + ".x";
+    _main.hex = (bool)hex;
     return 0;
 }
 
 int sea_order(void* q, void* p, void* a, void* b, int len)
 {
     miracl *mip;
-    mip=mirsys(1000,0);
+    mip=mirsys(10000,0);
     mip->IOBASE=16;
     Big P = le2big(p, len);
-    process_main(P, _main.mueller.c_str(), _main.processed.c_str());
+    process_main(P, _main.mueller.c_str(), _main.processed.c_str(), _main.hex);
     mirexit();
 
     mip=mirsys(18,0);

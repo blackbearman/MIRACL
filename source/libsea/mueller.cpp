@@ -415,8 +415,7 @@ Big le2big(void* src, size_t len)
     return Big(dest);
 }
 
-
-int process_main(Big p, const char* in, const char* out)
+int process_main(Big p, const char* in, const char* out, bool hex)
 {
     ofstream ofile;
     ifstream ifile;
@@ -424,7 +423,7 @@ int process_main(Big p, const char* in, const char* out)
     Big c;
     BOOL gotP,gotI,gotO,dir;
     int Base;
-    //miracl *mip=&precision;
+    miracl *mip=get_mip();
     set_io_buffer_size(2048);
 
     ip=0;
@@ -471,7 +470,11 @@ int process_main(Big p, const char* in, const char* out)
     ofile << p << endl;
     forever
     {
+        if(!hex)
+            mip->IOBASE=10;
         ifile >> lp;
+        if(!hex)
+            mip->IOBASE=16;
         if (ifile.eof()) break;
         if (max>0 && lp>max) break;
 
@@ -480,7 +483,11 @@ int process_main(Big p, const char* in, const char* out)
         ofile << lp << endl;
         forever
         {
+            if(!hex)
+                mip->IOBASE=10;
             ifile >> c >> nx >> ny;
+            if(!hex)
+                mip->IOBASE=16;
   
    // reduce coefficients mod p
             c=c%p;

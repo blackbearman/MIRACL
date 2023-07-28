@@ -60,7 +60,7 @@ int main()
     size_t n;
 	code = bignStdParams(params, "1.2.112.0.2.0.34.101.45.3.1");
     n = params->l / 4;
-    sea_init("mueller.txt");
+    sea_init("mueller.raw", FALSE);
     before = clock();
     code = seaCard(params);
     clock_t difference = clock() - before;

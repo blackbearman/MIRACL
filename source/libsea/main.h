@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-int sea_init(const char* mueller);
+int sea_init(const char* mueller, int hex);
 
 int sea_order(void* q, void* p, void* a, void* b, int len);
 
