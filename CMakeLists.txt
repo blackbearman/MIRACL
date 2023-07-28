@@ -122,3 +122,16 @@ target_include_directories("bee2dog" PRIVATE "source")
 target_link_libraries("bee2dog" PRIVATE sea)
 target_link_libraries("bee2dog" PRIVATE bee2)
 
+add_executable("process" 
+    "source/curve/process.cpp" 
+)
+target_include_directories("process" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries("process" PRIVATE miracl)
+
+add_executable("sea.exe" 
+    "source/curve/sea.cpp" 
+    "source/curve/polyxy.cpp"
+)
+target_include_directories("sea.exe" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories("sea.exe" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/source/curve")
+target_link_libraries("sea.exe" PRIVATE miracl)
